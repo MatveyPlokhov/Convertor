@@ -33,6 +33,7 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     public void convertButtonClick(Uri uri) {
+        //выполнение в потоке
         model.convertImage(uri);
     }
 
