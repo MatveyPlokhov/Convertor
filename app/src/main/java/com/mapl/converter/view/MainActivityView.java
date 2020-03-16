@@ -18,7 +18,13 @@ public interface MainActivityView extends MvpView {
     void conversionResult();
 
     @StateStrategyType(value = SkipStrategy.class)
-    void checkPermission();
+    void versionMOrLater();
+
+    @StateStrategyType(value = SkipStrategy.class)
+    void havePermission();
+
+    @StateStrategyType(value = SkipStrategy.class)
+    void noPermission();
 
     @StateStrategyType(value = AddToEndSingleStrategy.class)
     void startProgressBar();

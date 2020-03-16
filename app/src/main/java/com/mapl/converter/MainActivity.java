@@ -2,9 +2,7 @@ package com.mapl.converter;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -101,18 +99,22 @@ public class MainActivity extends MvpAppCompatActivity
     }
 
     @Override
-    public void checkPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int result = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-            if (result == PackageManager.PERMISSION_GRANTED) {
-                btnConvert.setEnabled(false);
-                presenter.convertBitmap(bitmap);
-            } else {
-                btnConvert.setEnabled(true);
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_KEY);
-            }
-        }
+    public void versionMOrLater() {
+        int result = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        presenter.checkPermission(result);
+    }
+
+    @Override
+    public void havePermission() {
+        btnConvert.setEnabled(false);
+        presenter.convertBitmap(bitmap);
+    }
+
+    @Override
+    public void noPermission() {
+        btnConvert.setEnabled(true);
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_KEY);
     }
 
     @Override

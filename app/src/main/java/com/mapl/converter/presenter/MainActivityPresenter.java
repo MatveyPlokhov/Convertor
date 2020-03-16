@@ -1,9 +1,13 @@
 package com.mapl.converter.presenter;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Build;
+
+import androidx.core.app.ActivityCompat;
 
 import com.mapl.converter.MainActivity;
 import com.mapl.converter.model.MainActivityModel;
@@ -38,7 +42,19 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     }
 
     public void convertButtonClick() {
-        getViewState().checkPermission();
+        checkAndroidVersion();
+    }
+
+    private void checkAndroidVersion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) getViewState().versionMOrLater();
+    }
+
+    public void checkPermission(int result) {
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            getViewState().havePermission();
+        } else {
+            getViewState().noPermission();
+        }
     }
 
     public void convertBitmap(Bitmap bitmap) {
@@ -61,6 +77,6 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
 
     public void permissionsResultConvert(int requestCode, int[] grantResults) {
         if (requestCode == MainActivity.PERMISSION_KEY && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            getViewState().checkPermission();
+            checkAndroidVersion();
     }
 }
