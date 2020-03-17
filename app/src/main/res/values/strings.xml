@@ -3,4 +3,5 @@
     <string name="main_image">main image</string>
     <string name="converted_image">converted image</string>
     <string name="select">Select</string>
+    <string name="convert">convert</string>
 </resources>
