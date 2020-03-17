@@ -2,12 +2,20 @@ package com.mapl.converter.presenter;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.Build;
 
 import com.mapl.converter.MainActivity;
 import com.mapl.converter.model.MainActivityModel;
 import com.mapl.converter.view.MainActivityView;
 
+import java.util.HashMap;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import moxy.MvpPresenter;
 
 import static android.app.Activity.RESULT_OK;
@@ -32,12 +40,60 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         getViewState().selectImage();
     }
 
-    public void convertButtonClick(Uri uri) {
-        model.convertImage(uri);
+    public void convertButtonClick() {
+        checkAndroidVersion();
+    }
+
+    private void checkAndroidVersion() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) getViewState().versionMOrLater();
+    }
+
+    public void checkPermission(int result) {
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            getViewState().havePermission();
+        } else {
+            getViewState().noPermission();
+        }
+    }
+
+    public void convertBitmap(Bitmap bitmap) {
+        getViewState().startProgressBar();
+        Observable.create((ObservableOnSubscribe<Boolean>) emitter -> {
+            emitter.onNext(model.convertImage(bitmap));
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aBoolean -> {
+                    getViewState().stopProgressBar();
+                    getViewState().conversionResult();
+                });
     }
 
     public void activityResultImage(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.KEY && resultCode == RESULT_OK && data != null && data.getData() != null)
+        if (requestCode == MainActivity.PHOTO_KEY && resultCode == RESULT_OK && data != null)
             getViewState().setMainImage(data);
+    }
+
+    public void permissionsResultConvert(int requestCode, int[] grantResults) {
+        if (requestCode == MainActivity.PERMISSION_KEY && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            checkAndroidVersion();
+    }
+
+    public void loadAdvice() {
+        Observable.create((ObservableOnSubscribe<HashMap<String, String>>) emitter -> {
+            HashMap<String, String> map = model.getAdvice();
+            emitter.onNext(map);
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(map -> {
+                    if (map.get("id") != null) {
+                        String advice = map.get("advice");
+                        String id = "#" + map.get("id");
+                        getViewState().showAdvice(advice, id);
+                    } else {
+                        getViewState().hideAdvice();
+                    }
+                });
     }
 }
