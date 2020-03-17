@@ -31,4 +31,10 @@ public interface MainActivityView extends MvpView {
 
     @StateStrategyType(value = AddToEndSingleStrategy.class)
     void stopProgressBar();
+
+    @StateStrategyType(value = AddToEndSingleStrategy.class)
+    void showAdvice(String advice, String id);
+
+    @StateStrategyType(value = AddToEndSingleStrategy.class)
+    void hideAdvice();
 }

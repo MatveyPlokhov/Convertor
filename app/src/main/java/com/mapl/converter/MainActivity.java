@@ -35,9 +35,10 @@ public class MainActivity extends MvpAppCompatActivity
     public static final int PERMISSION_KEY = 11;
     private Bitmap bitmap;
     private Button btnSelect, btnConvert;
-    private TextView textUri;
+    private TextView textUri, advice_number, advice;
     private ImageView imgMain;
     private ProgressBar progressBar;
+    private View adviceLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,11 +48,20 @@ public class MainActivity extends MvpAppCompatActivity
         btnSelect = findViewById(R.id.button_select);
         btnConvert = findViewById(R.id.button_convert);
         textUri = findViewById(R.id.text_uri);
+        advice_number = findViewById(R.id.advice_number);
+        advice = findViewById(R.id.advice);
         imgMain = findViewById(R.id.image_main);
         progressBar = findViewById(R.id.progressBar);
+        adviceLayout = findViewById(R.id.advice_layout);
 
         btnSelect.setOnClickListener(this);
         btnConvert.setOnClickListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        presenter.loadAdvice();
     }
 
     @Override
@@ -120,11 +130,25 @@ public class MainActivity extends MvpAppCompatActivity
     @Override
     public void startProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
+        presenter.loadAdvice();
     }
 
     @Override
     public void stopProgressBar() {
         progressBar.setVisibility(View.INVISIBLE);
+        presenter.loadAdvice();
+    }
+
+    @Override
+    public void showAdvice(String adviceText, String id) {
+        adviceLayout.setVisibility(View.VISIBLE);
+        advice_number.setText(id);
+        advice.setText(adviceText);
+    }
+
+    @Override
+    public void hideAdvice() {
+        adviceLayout.setVisibility(View.GONE);
     }
 
     @Override

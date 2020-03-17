@@ -1,17 +1,16 @@
 package com.mapl.converter.presenter;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
 
-import androidx.core.app.ActivityCompat;
-
 import com.mapl.converter.MainActivity;
 import com.mapl.converter.model.MainActivityModel;
 import com.mapl.converter.view.MainActivityView;
+
+import java.util.HashMap;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
@@ -78,5 +77,23 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
     public void permissionsResultConvert(int requestCode, int[] grantResults) {
         if (requestCode == MainActivity.PERMISSION_KEY && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             checkAndroidVersion();
+    }
+
+    public void loadAdvice() {
+        Observable.create((ObservableOnSubscribe<HashMap<String, String>>) emitter -> {
+            HashMap<String, String> map = model.getAdvice();
+            emitter.onNext(map);
+            emitter.onComplete();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(map -> {
+                    if (map.get("id") != null) {
+                        String advice = map.get("advice");
+                        String id = "#" + map.get("id");
+                        getViewState().showAdvice(advice, id);
+                    } else {
+                        getViewState().hideAdvice();
+                    }
+                });
     }
 }
