@@ -6,5 +6,5 @@ public class SlipModel {
     @SerializedName("advice")
     public String advice;
     @SerializedName("slip_id")
-    public int id;
+    public int number;
 }

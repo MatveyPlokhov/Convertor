@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ public class MainActivity extends MvpAppCompatActivity
 
     public static final int PHOTO_KEY = 12;
     public static final int PERMISSION_KEY = 11;
+    private Toolbar toolbar;
     private Bitmap bitmap;
     private Button btnSelect, btnConvert;
     private TextView textUri, advice_number, advice;
@@ -44,6 +46,8 @@ public class MainActivity extends MvpAppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.toolbar);
+        setActionBar(toolbar);
 
         btnSelect = findViewById(R.id.button_select);
         btnConvert = findViewById(R.id.button_convert);

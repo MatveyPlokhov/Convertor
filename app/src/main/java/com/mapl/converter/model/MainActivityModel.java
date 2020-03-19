@@ -3,6 +3,9 @@ package com.mapl.converter.model;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
+import com.mapl.converter.model.database.AdviceSingleton;
+import com.mapl.converter.model.database.dao.AdvicesDao;
+import com.mapl.converter.model.database.model.Advice;
 import com.mapl.converter.model.rest.AdviceSlip;
 import com.mapl.converter.model.rest.entities.AdviceSlipModel;
 
@@ -14,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Random;
 
 import retrofit2.Response;
 
@@ -39,18 +43,33 @@ public class MainActivityModel {
     }
 
     public HashMap<String, String> getAdvice() {
+        AdvicesDao dao = AdviceSingleton.getInstance().getAdvicesDao();
+        Random random = new Random();
+        int count = dao.getCount();
         try {
             Response<AdviceSlipModel> response = AdviceSlip.getSingleton().getAPI().loadAdvice().execute();
             AdviceSlipModel model = response.body();
             if (response.isSuccessful() && model != null) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("advice", model.slipModel.advice);
-                map.put("id", String.valueOf(model.slipModel.id));
-                return map;
+                Advice advice = new Advice();
+                advice.number = model.slipModel.number;
+                advice.advice = model.slipModel.advice;
+                dao.insertAdvice(advice);
+
+                return getHashMap(model.slipModel.number, model.slipModel.advice);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new HashMap<>();
+
+        if (count == 0) return new HashMap<>();
+        Advice advice = dao.getAdviceById(1 + random.nextInt(count));
+        return getHashMap(advice.number, advice.advice);
+    }
+
+    private HashMap<String, String> getHashMap(int number, String advice) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("number", String.valueOf(number));
+        map.put("advice", advice);
+        return map;
     }
 }
