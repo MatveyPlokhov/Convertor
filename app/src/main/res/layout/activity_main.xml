@@ -6,16 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/image_jpeg"
-        android:layout_width="wrap_content"
+    <Toolbar
+        android:id="@+id/toolbar"
+        android:background="@color/colorPrimary"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="JPEG"
-        app:layout_constraintEnd_toEndOf="@+id/image_main"
-        app:layout_constraintStart_toStartOf="@+id/image_main"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/image_main"
@@ -25,64 +23,59 @@
         android:layout_marginTop="16dp"
         android:contentDescription="@string/main_image"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_jpeg"
-        app:srcCompat="@drawable/ic_launcher_background" />
-
-    <Button
-        android:id="@+id/button_convert"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:enabled="false"
-        android:text=">"
-        app:layout_constraintBottom_toBottomOf="@+id/image_main"
-        app:layout_constraintEnd_toStartOf="@+id/image_converted"
-        app:layout_constraintStart_toEndOf="@+id/image_main"
-        app:layout_constraintTop_toTopOf="@+id/image_main"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:id="@+id/image_png"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="PNG"
-        app:layout_constraintEnd_toEndOf="@+id/image_converted"
-        app:layout_constraintStart_toStartOf="@+id/image_converted"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText" />
-
-    <ImageView
-        android:id="@+id/image_converted"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/converted_image"
-        app:layout_constraintBottom_toBottomOf="@+id/image_main"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/image_main"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <Button
         android:id="@+id/button_select"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/select"
-        app:layout_constraintEnd_toEndOf="@+id/image_converted"
-        app:layout_constraintStart_toStartOf="@+id/image_main"
-        app:layout_constraintTop_toBottomOf="@+id/image_main" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/image_main"
+        app:layout_constraintTop_toTopOf="@+id/image_main" />
 
+    <Button
+        android:id="@+id/button_convert"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:text="@string/convert"
+        app:layout_constraintEnd_toEndOf="@+id/button_select"
+        app:layout_constraintStart_toStartOf="@+id/button_select"
+        app:layout_constraintTop_toBottomOf="@+id/button_select" />
 
     <TextView
         android:id="@+id/text_uri"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_select"
-        app:layout_constraintTop_toBottomOf="@+id/button_select"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="@+id/image_main"
+        app:layout_constraintEnd_toEndOf="@+id/button_convert"
+        app:layout_constraintStart_toStartOf="@+id/button_convert"
+        app:layout_constraintTop_toBottomOf="@+id/button_convert"
         tools:text="url" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_main" />
+
+    <include
+        android:id="@+id/advice_layout"
+        layout="@layout/advice_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="?actionBarSize"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
