@@ -87,12 +87,12 @@ public class MainActivityPresenter extends MvpPresenter<MainActivityView> {
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(map -> {
-                    if (map.get("number") != null) {
+                    if (map.get("advice") != null) {
                         String advice = map.get("advice");
                         String id = "#" + map.get("number");
                         getViewState().showAdvice(advice, id);
                     } else {
-                        getViewState().hideAdvice();
+                        getViewState().connectionError();
                     }
                 });
     }

@@ -15,8 +15,11 @@ import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.mapl.converter.presenter.MainActivityPresenter;
 import com.mapl.converter.view.MainActivityView;
 
@@ -34,13 +37,14 @@ public class MainActivity extends MvpAppCompatActivity
 
     public static final int PHOTO_KEY = 12;
     public static final int PERMISSION_KEY = 11;
+
+    private CoordinatorLayout coordinatorLayout;
     private Toolbar toolbar;
     private Bitmap bitmap;
     private Button btnSelect, btnConvert;
     private TextView textUri, advice_number, advice;
     private ImageView imgMain;
     private ProgressBar progressBar;
-    private View adviceLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,7 @@ public class MainActivity extends MvpAppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         setActionBar(toolbar);
 
+        coordinatorLayout = findViewById(R.id.coordinator_layout);
         btnSelect = findViewById(R.id.button_select);
         btnConvert = findViewById(R.id.button_convert);
         textUri = findViewById(R.id.text_uri);
@@ -56,7 +61,6 @@ public class MainActivity extends MvpAppCompatActivity
         advice = findViewById(R.id.advice);
         imgMain = findViewById(R.id.image_main);
         progressBar = findViewById(R.id.progressBar);
-        adviceLayout = findViewById(R.id.advice_layout);
 
         btnSelect.setOnClickListener(this);
         btnConvert.setOnClickListener(this);
@@ -145,14 +149,15 @@ public class MainActivity extends MvpAppCompatActivity
 
     @Override
     public void showAdvice(String adviceText, String id) {
-        adviceLayout.setVisibility(View.VISIBLE);
         advice_number.setText(id);
         advice.setText(adviceText);
     }
 
     @Override
-    public void hideAdvice() {
-        adviceLayout.setVisibility(View.GONE);
+    public void connectionError() {
+        Snackbar.make(coordinatorLayout, "Connection error", BaseTransientBottomBar.LENGTH_LONG)
+                .setAction("ok", v -> {/*action*/})
+                .show();
     }
 
     @Override

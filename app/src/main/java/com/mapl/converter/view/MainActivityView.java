@@ -36,5 +36,5 @@ public interface MainActivityView extends MvpView {
     void showAdvice(String advice, String id);
 
     @StateStrategyType(value = AddToEndSingleStrategy.class)
-    void hideAdvice();
+    void connectionError();
 }

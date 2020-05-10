@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName;
 public class SlipModel {
     @SerializedName("advice")
     public String advice;
-    @SerializedName("slip_id")
+    @SerializedName("id")
     public int number;
 }
